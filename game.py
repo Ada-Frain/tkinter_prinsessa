@@ -3,15 +3,21 @@ from random import choices
 
 colors = []
 def choice(b,n):
-    # global globals()[str(n)]
-
-    globals()[str(n)].config(bg=b)
+    globals()[str(n)].config(bg=b, state=DISABLED)
     colors.append(b)
-    if colors[0] == colors[1]:
+    print(colors)
+    if len(colors) == 2 and colors[0] == colors[1]:
         lb1.config(text="Good")
-    else:
+        globals()[str(n)].config(state=DISABLED)
+        colors.clear()
+    elif len(colors) == 2 and colors[0] != colors[1]:
         lb1.config(text="Bad")
-    print(b, n)
+        colors.clear()
+        start()
+    else:
+        lb1.config(text="Wait")
+    
+    # print(b, n)
     print(colors)
 
 sec = 3 
