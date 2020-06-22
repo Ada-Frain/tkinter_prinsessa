@@ -8,16 +8,17 @@ points = 0
 colors = []
 done = []
 btnlist = []
-colorlist = ['red', 'blue', 'green', 'purple', 'orange', 'yellow', 'red', 'blue', 'green', 'purple', 'orange', 'yellow']
+colorlist = ['#ff0000', '#ff7d00', '#ffff00', '#00ff00', '#0000ff', '#7d00ff', '#ff0000', '#ff7d00', '#ffff00', '#00ff00', '#0000ff', '#7d00ff']
 
 
 def levels():
     global sec, colorlist, level, points
     points = 0
     sec = 4
-    colorlist = ['red', 'blue', 'green', 'purple', 'orange', 'yellow', 'red', 'blue', 'green', 'purple', 'orange', 'yellow']
+    colorlist = ['#ff0000', '#ff7d00', '#ffff00', '#00ff00', '#0000ff', '#7d00ff', '#ff0000', '#ff7d00', '#ffff00', '#00ff00', '#0000ff', '#7d00ff']
     level += 1
-    nextBtn = Button(root, text="Next", command=play).grid(column=0, row=6)
+    nextBtn.config(state=NORMAL)
+
 
 def choice(b,n):
     global points
@@ -52,6 +53,7 @@ def start():
 
 
 def play():
+    global nextBtn
     playBtn.grid_remove()
     root.grid_rowconfigure(0, weight=0)
     root.grid_columnconfigure(0, weight=0)
@@ -65,7 +67,12 @@ def play():
             btnlist.append('btn'+str(i)+str(a))
             colorlist.remove(str(color).replace("['", "").replace("']", ""))
 
+    
+    nextBtn = Button(root, text="Next", command=play)
+    nextBtn.grid(column=3, row=5)
+    nextBtn.config(state=DISABLED)
     pointsLb.config(text="Points: 0")
+    levelLb = Label(root, text='Level: '+str(level)).grid(column=2, row=5)
 
     if sec == 4:
         start()
@@ -73,6 +80,11 @@ def play():
 root = Tk()
 root.title("Игра")
 root.geometry('600x550')
+
+style = ttk.Style()
+style.configure(root, padding=6, relief="flat", background="red")
+
+
 
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
@@ -85,5 +97,6 @@ timeLb.grid(column=0, row=5)
 
 pointsLb = Label(root, font=("gabriola", 15))
 pointsLb.grid(column=1, row=5)
+
 
 root.mainloop()
