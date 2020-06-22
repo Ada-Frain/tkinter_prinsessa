@@ -4,6 +4,8 @@ from random import choices
 
 class Game():
     def __init__(self):
+        self.level = 1
+        self.hearts = 5
         self.root = Tk()
         self.root.geometry(f'600x550+{self.root.winfo_screenwidth()//2 - 300}+{self.root.winfo_screenheight()//2 - 300}')
         self.root.title("АльцГеймер")
@@ -27,10 +29,8 @@ class Game():
     
     def play(self):
         global nextBtn, timeLb, pointsLb, heartsLb
-        self.level = 1
         self.sec = 4
         self.points = 0
-        self.hearts = 5
         self.btnlist = []
         self.colors = []
         self.done = []
@@ -77,7 +77,7 @@ class Game():
         globals()[str(n)].config(bg=b, state=DISABLED)
         self.colors.append(b)
         self.done.append(n)
-        # print(colors, done)
+
         if len(self.colors) == 2 and self.colors[0] == self.colors[1]:
             globals()[str(n)].config(state=DISABLED)
             self.colors.clear()
@@ -91,16 +91,13 @@ class Game():
                 globals()[str(i)].config(bg="white", state=NORMAL)
 
         if self.hearts == 0:
-            self.playBtn.grid(column=0, row=0)
+            #доделать! проигрыш в игре + кнопка для перехода на гл меню + шкала с кол-вом кнопок + ~темы
         
         if self.points == 6:
             self.levels()
 
     def levels(self):
-        global sec, colorlist, level, points
-        self.points = 0
-        self.sec = 4
-        colorlist = ['#ff0000', '#ff7d00', '#ffff00', '#00ff00', '#0000ff', '#7d00ff', '#ff0000', '#ff7d00', '#ffff00', '#00ff00', '#0000ff', '#7d00ff']
+        global level
         self.level += 1
         self.nextBtn.config(state=NORMAL)
 
