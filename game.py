@@ -28,11 +28,10 @@ def choice(b,n):
     if len(colors) == 2 and colors[0] == colors[1]:
         globals()[str(n)].config(state=DISABLED)
         colors.clear()
-        done.append(str(n))
         points += 1
         pointsLb.config(text="Points: " + str(points))
     elif len(colors) == 2 and colors[0] != colors[1]:
-        colors.clear() 
+        colors.clear()
         for i in done[-2:]:
             globals()[str(i)].config(bg="white", state=NORMAL)
     
@@ -48,55 +47,47 @@ def start():
     else:
         for i in btnlist:
             globals()[str(i)].config(bg="white", state=NORMAL)
-        timeLb.config(text="Play!")
+        timeLb.config(text="")
     sec -= 1
 
 
 def play():
-    global nextBtn
+    global nextBtn, timeLb, pointsLb
+    frame1=Frame(root,bg='medium sea green',bd=5)
+    frame1.grid(column=0, row=0)
     playBtn.grid_remove()
-    root.grid_rowconfigure(0, weight=0)
-    root.grid_columnconfigure(0, weight=0)
+    # root.grid_rowconfigure(0, weight=0)
+    # root.grid_columnconfigure(0, weight=0)
     for a in range(0,3):
         for i in range(0,4):
-            globals()['btn'+str(i)+str(a)] = Button(root, width=9, height=4, state=DISABLED)
             color = choices(colorlist)
             name = 'btn'+str(i)+str(a)
-            globals()['btn'+str(i)+str(a)].config(bg=color, command=lambda b=color, n=name: choice(b,n))
+            globals()['btn'+str(i)+str(a)] = Button(frame1, width=9, height=4, state=DISABLED, 
+                                    bg=color, command=lambda b=color, n=name: choice(b,n))
             globals()['btn'+str(i)+str(a)].grid(column=i, row=a)
             btnlist.append('btn'+str(i)+str(a))
             colorlist.remove(str(color).replace("['", "").replace("']", ""))
 
-    
-    nextBtn = Button(root, text="Next", command=play)
+    timeLb = Label(frame1, bg='medium sea green', font=("gabriola", 15))
+    timeLb.grid(column=0, row=5)
+    pointsLb = Label(frame1, text="Points: 0", bg='medium sea green',font=("gabriola", 15))
+    pointsLb.grid(column=1, row=5)
+    nextBtn = Button(frame1, text="Next level", state=DISABLED, command=play)
     nextBtn.grid(column=3, row=5)
-    nextBtn.config(state=DISABLED)
-    pointsLb.config(text="Points: 0")
-    levelLb = Label(root, text='Level: '+str(level)).grid(column=2, row=5)
+    levelLb = Label(frame1, bg='medium sea green',text='Level: '+str(level)).grid(column=2, row=5)
 
     if sec == 4:
         start()
 
+
 root = Tk()
 root.title("Игра")
 root.geometry('600x550')
-
-style = ttk.Style()
-style.configure(root, padding=6, relief="flat", background="red")
-
-
-
+root["bg"] = "medium sea green"
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
 playBtn = Button(root, text="Play!", width=25, height=5, bg='black', fg='red', font='arial 14', command=play)
 playBtn.grid(column=0, row=0)
-
-timeLb = Label(root, font=("gabriola", 15))
-timeLb.grid(column=0, row=5)
-
-pointsLb = Label(root, font=("gabriola", 15))
-pointsLb.grid(column=1, row=5)
-
 
 root.mainloop()
