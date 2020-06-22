@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from random import choices
 
+
 level = 1
 sec = 4
 points = 0
@@ -53,11 +54,10 @@ def start():
 
 def play():
     global nextBtn, timeLb, pointsLb
-    frame1=Frame(root,bg='medium sea green',bd=5)
+    frame1=Frame(root, bg='medium sea green', bd=5)
     frame1.grid(column=0, row=0)
     playBtn.grid_remove()
-    # root.grid_rowconfigure(0, weight=0)
-    # root.grid_columnconfigure(0, weight=0)
+
     for a in range(0,3):
         for i in range(0,4):
             color = choices(colorlist)
@@ -68,13 +68,13 @@ def play():
             btnlist.append('btn'+str(i)+str(a))
             colorlist.remove(str(color).replace("['", "").replace("']", ""))
 
-    timeLb = Label(frame1, bg='medium sea green', font=("gabriola", 15))
+    timeLb = Label(frame1, bg='medium sea green', font=("comic sans ms", 10))
     timeLb.grid(column=0, row=5)
-    pointsLb = Label(frame1, text="Points: 0", bg='medium sea green',font=("gabriola", 15))
+    pointsLb = Label(frame1, text="Points: 0", bg='medium sea green', font=("comic sans ms", 10))
     pointsLb.grid(column=1, row=5)
-    nextBtn = Button(frame1, text="Next level", state=DISABLED, command=play)
+    nextBtn = Button(frame1, text="Next level", bg='green yellow', font=("comic sans ms", 10), state=DISABLED, command=play)
     nextBtn.grid(column=3, row=5)
-    levelLb = Label(frame1, bg='medium sea green',text='Level: '+str(level)).grid(column=2, row=5)
+    levelLb = Label(frame1, text='Level: '+str(level), bg='medium sea green', font=("comic sans ms", 10)).grid(column=2, row=5)
 
     if sec == 4:
         start()
@@ -82,12 +82,12 @@ def play():
 
 root = Tk()
 root.title("Игра")
-root.geometry('600x550')
+root.geometry(f'600x550+{root.winfo_screenwidth()//2 - 300}+{root.winfo_screenheight()//2 - 300}')
 root["bg"] = "medium sea green"
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
-playBtn = Button(root, text="Play!", width=25, height=5, bg='black', fg='red', font='arial 14', command=play)
+playBtn = Button(root, text="Play!", width=7, height=1, bg='green yellow', fg='red', font=("comic sans ms", 30), command=play)
 playBtn.grid(column=0, row=0)
 
 root.mainloop()
