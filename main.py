@@ -156,6 +156,8 @@ class Game():
         record = self.level
         print(record)
         self.window.destroy()
+        self.root.destroy()
+        Game()
         
 
 if __name__ == '__main__':
