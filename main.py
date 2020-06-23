@@ -1,6 +1,5 @@
 from tkinter import *
 from random import choices
-from PIL import ImageTk,Image
 
 
 class Game():
@@ -35,7 +34,6 @@ class Game():
         global diff
         self.playBtn.config(state=NORMAL)
         self.diff = self.var.get()
-        print(self.diff)
 
     
     def play(self):
@@ -46,7 +44,7 @@ class Game():
         self.colors = []
         self.done = []
         colorlist = ['#ff0000', '#ff7d00', '#ffff00', '#00ff00', '#0000ff', '#7d00ff', '#ff0000', '#ff7d00', '#ffff00', '#00ff00', '#0000ff', '#7d00ff']
-        colorlist1 = ['red', 'green', 'pink', 'purple', 'red', 'green', 'pink', 'purple']
+        colorlist1 = ['#1ca9c9', 'green', 'pink', 'purple', '#1ca9c9', 'green', 'pink', 'purple']
         colorlist2 = ['mediumorchid', 'blueviolet', 'navy', 'royalblue', 'darkslategrey', 'mediumorchid', 'blueviolet', 'navy', 'royalblue', 'darkslategrey']
         if self.diff == 5:
             colorlist = colorlist + colorlist1
@@ -56,7 +54,6 @@ class Game():
         self.diffRbtn1.grid_remove()
         self.diffRbtn2.grid_remove()
         self.diffRbtn3.grid_remove()
-        print(self.diff)
         
         for a in range(1,self.diff):
             for i in range(0,self.diff):
@@ -68,17 +65,14 @@ class Game():
                 self.btnlist.append('btn'+str(i)+str(a))
                 colorlist.remove(str(color).replace("['", "").replace("']", ""))
 
-        frame2 = Frame(self.frame1, bg='medium sea green', bd=5)
-        frame2.grid(column=0, row=6, columnspan=4)
+        self.heartsLb = Label(self.frame1, text="❤"*self.hearts, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13))
+        self.heartsLb.grid(column=0, row=7, columnspan=3)
 
-        self.heartsLb = Label(frame2, text=str(self.hearts)+"/5", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 11))
-        self.heartsLb.grid(column=0, row=0)
+        timeLb = Label(self.frame1, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 12))
+        timeLb.grid(column=self.diff-1, row=0)
 
-        timeLb = Label(self.root, bg='medium sea green', font=("comic sans ms", 10))
-        timeLb.grid(column=1, row=0)
-
-        self.pointsLb = Label(frame2, text="Points: 0", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 11))
-        self.pointsLb.grid(column=1, row=0)
+        self.pointsLb = Label(self.frame1, text="Points: 0", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13))
+        self.pointsLb.grid(column=0, row=6, columnspan=3)
 
         self.nextBtn = Button(self.frame1, text="Next level", bg='green yellow', fg='#0a4500', font=("comic sans ms", 10), width=8, height=1, state=DISABLED, command=self.play)
         self.nextBtn.grid(column=self.diff-1, row=6, columnspan=2)
@@ -113,14 +107,14 @@ class Game():
         elif len(self.colors) == 2 and self.colors[0] != self.colors[1]:
             self.colors.clear()
             self.hearts -= 1
-            self.heartsLb.config(text=str(self.hearts)+"/5")
+            self.heartsLb.config(text="❤"*self.hearts)
             for i in self.done[-2:]:
                 globals()[str(i)].config(bg="white", state=NORMAL)
 
         if self.hearts == 0:
             for i in self.btnlist:
                 globals()[str(i)].config(state=DISABLED)
-            #доделать! проигрыш в игре + кнопка для перехода на гл меню + шкала с кол-вом кнопок + ~темы
+            #доделать! проигрыш в игре + кнопка для перехода на гл меню
         
         if self.points == 6:
             self.levels()
