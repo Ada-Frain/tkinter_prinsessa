@@ -1,7 +1,8 @@
 from tkinter import *
-from tkinter import messagebox
 from random import choices
-
+import sqlite3
+from kak import sql_insert_leader
+BD = sqlite3.connect('leadeers.db')
 
 class Game():
     def __init__(self):
@@ -29,7 +30,7 @@ class Game():
         self.diffRbtn3 = Radiobutton(self.frame1, text='Hard', bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13), variable=self.var, value=6, command=self.diffSelect)
         self.diffRbtn3.grid(column=2, row=1)
 
-        self.lidersBtn = Button(self.frame1, text="Leaders", width=8, height=1, bg='green yellow', fg='#0a4500', font=("comic sans ms", 25), )
+        self.lidersBtn = Button(self.frame1, text="Leaders", width=8, height=1, bg='green yellow', fg='#0a4500', font=("comic sans ms", 25), command=self.liderTab)
         self.lidersBtn.grid(column=0, row=2, columnspan=3)
 
         self.root.mainloop()
@@ -164,8 +165,18 @@ class Game():
         sql_insert_leader (con, entities)
         Game()
         
-    def liderTab():
+    def liderTab(self):
+        self.leadWind = Toplevel()
+        self.leadWind.geometry(f'350x300+{self.leadWind.winfo_screenwidth()//2 - 178}+{self.leadWind.winfo_screenheight()//2 - 178}')
+        self.leadWind["bg"] = "medium sea green"
+        lb = Label(self.leadWind, text="ТРОФИМОВА В ПРЕЗИДЕНТЫ!").pack()
+        cursed = BD.cursor()
+        cursed.execute('SELECT name, rec FROM records ORDER BY rec DESC LIMIT 5')
+        rows = cursed.fetchall()
+        for row in rows:
+            a=str(row[0]).replace('\n','') +' - '+str(row[1]).replace('\n','') + ' level'
+            name = Label(self.leadWind, text=str(a), bg='medium sea green', fg='#0a4500', font=("comic sans ms", 15)).pack()
+            #цикл готовЪ
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     Game()
