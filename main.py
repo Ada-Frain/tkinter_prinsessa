@@ -11,7 +11,7 @@ class Game():
         self.points = 0
         self.root = Tk()
         self.root.geometry(f'600x550+{self.root.winfo_screenwidth()//2 - 300}+{self.root.winfo_screenheight()//2 - 300}')
-        self.root.title("АльцГеймер")
+        self.root.title("AlzGamer")
 
         self.root["bg"] = "medium sea green"
         self.root.grid_rowconfigure(0, weight=1)
@@ -20,22 +20,19 @@ class Game():
         self.frame1 = Frame(self.root, bg='medium sea green', bd=5)
         self.frame1.grid(column=0, row=0)
 
-        self.info = Label(self.frame1, text="You have to find all the pairs by turning card.\nWhen you turn over 2 cards, there are 2 possibilities:\n If the two cards match, it's a pair!\nYou can then turn over 2 new cards.\nOtherwise, if the cards don't match, they are automatically turned\nface down and you can then turn over 2 new cards.", width=50, height=6, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 10))
-        self.info.grid(column=0, row=0, columnspan=3)
-
         self.playBtn = Button(self.frame1, text="Play!", width=8, height=1, bg='green yellow', fg='#0a4500', font=("comic sans ms", 32), state=DISABLED, command=self.play)
-        self.playBtn.grid(column=0, row=1, columnspan=3)
+        self.playBtn.grid(column=0, row=0, columnspan=3)
 
         self.var = IntVar()
         self.diffRbtn1 = Radiobutton(self.frame1, text='Easy', bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13), variable=self.var, value=4, command=self.diffSelect)
-        self.diffRbtn1.grid(column=0, row=2)
+        self.diffRbtn1.grid(column=0, row=1)
         self.diffRbtn2 = Radiobutton(self.frame1, text='Medium', bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13), variable=self.var, value=5, command=self.diffSelect)
-        self.diffRbtn2.grid(column=1, row=2)
+        self.diffRbtn2.grid(column=1, row=1)
         self.diffRbtn3 = Radiobutton(self.frame1, text='Hard', bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13), variable=self.var, value=6, command=self.diffSelect)
-        self.diffRbtn3.grid(column=2, row=2)
+        self.diffRbtn3.grid(column=2, row=1)
 
         self.lidersBtn = Button(self.frame1, text="Leaders", width=8, height=1, bg='green yellow', fg='#0a4500', font=("comic sans ms", 25), command=self.liderTab)
-        self.lidersBtn.grid(column=0, row=3, columnspan=3)
+        self.lidersBtn.grid(column=0, row=2, columnspan=3)
 
         self.root.mainloop()
         
@@ -63,7 +60,6 @@ class Game():
         self.diffRbtn1.grid_remove()
         self.diffRbtn2.grid_remove()
         self.diffRbtn3.grid_remove()
-        self.info.grid_remove()
         
         for a in range(1,self.diff):
             for i in range(0,self.diff):
@@ -98,7 +94,7 @@ class Game():
     def start(self):
         global sec
         if self.sec > 0:
-            timeLb.config(text=str(self.sec))
+            timeLb.config(text='Timer: ' + str(self.sec))
             timeLb.after(1000, self.start)
         else:
             for i in self.btnlist:
@@ -172,7 +168,7 @@ class Game():
         self.leadWind = Toplevel()
         self.leadWind.geometry(f'350x300+{self.leadWind.winfo_screenwidth()//2 - 178}+{self.leadWind.winfo_screenheight()//2 - 178}')
         self.leadWind["bg"] = "medium sea green"
-        lb = Label(self.leadWind, text="ТРОФИМОВА В ПРЕЗИДЕНТЫ", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 17)).pack()
+        lb = Label(self.leadWind, text="Leaderboard", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 20)).pack()
         cursed = BD.cursor()
         cursed.execute('SELECT name, rec FROM records ORDER BY rec DESC LIMIT 7')
         rows = cursed.fetchall()
