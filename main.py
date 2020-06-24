@@ -73,7 +73,7 @@ class Game():
         if self.level > 1:
             self.heartsLb.grid_remove()
 
-        self.heartsLb = Label(self.frame1, text="❤"*self.hearts, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13))
+        self.heartsLb = Label(self.frame1, text="❤"*self.hearts, bg='medium sea green', fg='#b00000', font=("comic sans ms", 13))
         self.heartsLb.grid(column=0, row=7, columnspan=3)
 
         timeLb = Label(self.frame1, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 12))
@@ -156,13 +156,12 @@ class Game():
         record = self.level
         self.window.destroy()
         self.root.destroy()
-        con = sqlite3.connect('leadeers.db')
-        cursed = con.cursor()
+        cursed = BD.cursor()
         cursed.execute('SELECT * FROM records ORDER BY rec DESC')
         rows = cursed.fetchall()
         nID = len(rows)+1
         entities = (nID, nick, record)
-        sql_insert_leader (con, entities)
+        sql_insert_leader (BD, entities)
         Game()
         
     def liderTab(self):
