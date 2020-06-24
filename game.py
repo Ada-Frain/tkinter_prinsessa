@@ -6,6 +6,7 @@ from random import choices
 level = 1
 sec = 4
 points = 0
+hearts = 5
 colors = []
 done = []
 btnlist = []
@@ -22,7 +23,7 @@ def levels():
 
 
 def choice(b,n):
-    global points
+    global points, hearts
     globals()[str(n)].config(bg=b, state=DISABLED)
     colors.append(b)
     done.append(n)
@@ -33,8 +34,13 @@ def choice(b,n):
         pointsLb.config(text="Points: " + str(points))
     elif len(colors) == 2 and colors[0] != colors[1]:
         colors.clear()
+        hearts -= 1
+        heartsLb.config(text=str(hearts)+"/5")
         for i in done[-2:]:
             globals()[str(i)].config(bg="white", state=NORMAL)
+
+    if hearts == 0:
+        playBtn.grid(column=0, row=0)
     
     if points == 6:
         levels()
@@ -53,12 +59,11 @@ def start():
 
 
 def play():
-    global nextBtn, timeLb, pointsLb
-    frame1=Frame(root, bg='medium sea green', bd=5)
-    frame1.grid(column=0, row=0)
+    global nextBtn, timeLb, pointsLb, heartsLb
     playBtn.grid_remove()
+    diffSc.grid_remove()
 
-    for a in range(0,3):
+    for a in range(1,4):
         for i in range(0,4):
             color = choices(colorlist)
             name = 'btn'+str(i)+str(a)
@@ -68,6 +73,8 @@ def play():
             btnlist.append('btn'+str(i)+str(a))
             colorlist.remove(str(color).replace("['", "").replace("']", ""))
 
+    heartsLb = Label(frame1, text=str(hearts)+"/5", bg='medium sea green', font=("comic sans ms", 10))
+    heartsLb.grid(column=0, row=0)
     timeLb = Label(frame1, bg='medium sea green', font=("comic sans ms", 10))
     timeLb.grid(column=0, row=5)
     pointsLb = Label(frame1, text="Points: 0", bg='medium sea green', font=("comic sans ms", 10))
@@ -87,7 +94,29 @@ root["bg"] = "medium sea green"
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
-playBtn = Button(root, text="Play!", width=7, height=1, bg='green yellow', fg='red', font=("comic sans ms", 30), command=play)
+frame1 = Frame(root, bg='medium sea green', bd=5)
+frame1.grid(column=0, row=0)
+
+playBtn = Button(frame1, text="Play!", width=7, height=1, bg='green yellow', fg='red', font=("comic sans ms", 30), command=play)
 playBtn.grid(column=0, row=0)
 
+diffSc = Scale(frame1, orient=HORIZONTAL, length=250, from_=1, to=2, tickinterval=1, resolution=1, font=("comic sans ms", 10))
+diffSc.grid(column=0, row=1)
+diff = diffSc.get()
+
+window = Toplevel()
+window.geometry('350x300')
+window["bg"] = "medium sea green"
+title = Label(window, text="Game ower", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 30))
+title.pack()
+nameLb = Label(window, text="Your name:", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 15))
+nameLb.pack()
+nikname=Text(window, height=2, width=15, font='Arial 14', wrap=WORD)
+nikname.pack()
+recordLb = Label(window, text="Your record:", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 15))
+recordLb.pack()
+recordlLb = Label(window, text="", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 15))
+recordlLb.pack()
+menuBtn = Button(window, text="Back", width=7, height=1, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 20))
+menuBtn.pack()
 root.mainloop()

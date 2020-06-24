@@ -169,9 +169,9 @@ class Game():
         self.leadWind = Toplevel()
         self.leadWind.geometry(f'350x300+{self.leadWind.winfo_screenwidth()//2 - 178}+{self.leadWind.winfo_screenheight()//2 - 178}')
         self.leadWind["bg"] = "medium sea green"
-        lb = Label(self.leadWind, text="ТРОФИМОВА В ПРЕЗИДЕНТЫ!").pack()
+        lb = Label(self.leadWind, text="ТРОФИМОВА В ПРЕЗИДЕНТЫ", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 17)).pack()
         cursed = BD.cursor()
-        cursed.execute('SELECT name, rec FROM records ORDER BY rec DESC LIMIT 5')
+        cursed.execute('SELECT name, rec FROM records ORDER BY rec DESC LIMIT 7')
         rows = cursed.fetchall()
         for row in rows:
             a=str(row[0]).replace('\n','') +' - '+str(row[1]).replace('\n','') + ' level'
