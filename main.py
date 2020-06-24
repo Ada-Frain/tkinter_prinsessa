@@ -8,6 +8,7 @@ class Game():
     def __init__(self):
         self.level = 1
         self.hearts = 5
+        self.points = 0
         self.root = Tk()
         self.root.geometry(f'600x550+{self.root.winfo_screenwidth()//2 - 300}+{self.root.winfo_screenheight()//2 - 300}')
         self.root.title("АльцГеймер")
@@ -19,19 +20,22 @@ class Game():
         self.frame1 = Frame(self.root, bg='medium sea green', bd=5)
         self.frame1.grid(column=0, row=0)
 
+        self.info = Label(self.frame1, text="You have to find all the pairs by turning card.\nWhen you turn over 2 cards, there are 2 possibilities:\n If the two cards match, it's a pair!\nYou can then turn over 2 new cards.\nOtherwise, if the cards don't match, they are automatically turned\nface down and you can then turn over 2 new cards.", width=50, height=6, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 10))
+        self.info.grid(column=0, row=0, columnspan=3)
+
         self.playBtn = Button(self.frame1, text="Play!", width=8, height=1, bg='green yellow', fg='#0a4500', font=("comic sans ms", 32), state=DISABLED, command=self.play)
-        self.playBtn.grid(column=0, row=0, columnspan=3)
+        self.playBtn.grid(column=0, row=1, columnspan=3)
 
         self.var = IntVar()
         self.diffRbtn1 = Radiobutton(self.frame1, text='Easy', bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13), variable=self.var, value=4, command=self.diffSelect)
-        self.diffRbtn1.grid(column=0, row=1)
+        self.diffRbtn1.grid(column=0, row=2)
         self.diffRbtn2 = Radiobutton(self.frame1, text='Medium', bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13), variable=self.var, value=5, command=self.diffSelect)
-        self.diffRbtn2.grid(column=1, row=1)
+        self.diffRbtn2.grid(column=1, row=2)
         self.diffRbtn3 = Radiobutton(self.frame1, text='Hard', bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13), variable=self.var, value=6, command=self.diffSelect)
-        self.diffRbtn3.grid(column=2, row=1)
+        self.diffRbtn3.grid(column=2, row=2)
 
         self.lidersBtn = Button(self.frame1, text="Leaders", width=8, height=1, bg='green yellow', fg='#0a4500', font=("comic sans ms", 25), command=self.liderTab)
-        self.lidersBtn.grid(column=0, row=2, columnspan=3)
+        self.lidersBtn.grid(column=0, row=3, columnspan=3)
 
         self.root.mainloop()
         
@@ -43,7 +47,7 @@ class Game():
     def play(self):
         global nextBtn, timeLb, pointsLb, heartsLb
         self.sec = self.diff + 2
-        self.points = 0
+        
         self.btnlist = []
         self.colors = []
         self.done = []
@@ -59,6 +63,7 @@ class Game():
         self.diffRbtn1.grid_remove()
         self.diffRbtn2.grid_remove()
         self.diffRbtn3.grid_remove()
+        self.info.grid_remove()
         
         for a in range(1,self.diff):
             for i in range(0,self.diff):
@@ -79,7 +84,7 @@ class Game():
         timeLb = Label(self.frame1, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 12))
         timeLb.grid(column=self.diff-1, row=0)
 
-        self.pointsLb = Label(self.frame1, text="Points: 0", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13))
+        self.pointsLb = Label(self.frame1, text="Points: " + str(self.points), bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13))
         self.pointsLb.grid(column=0, row=6, columnspan=3)
 
         self.nextBtn = Button(self.frame1, text="Next level", bg='green yellow', fg='#0a4500', font=("comic sans ms", 10), width=8, height=1, state=DISABLED, command=self.play)
@@ -133,27 +138,26 @@ class Game():
             self.nickname.pack()
             recordLb = Label(self.window, text="Your record:", bg='medium sea green', fg='#0a4500', font=("comic sans ms", 15))
             recordLb.pack()
-            recordlLb = Label(self.window, text="Level: " + str(self.level), bg='medium sea green', fg='#0a4500', font=("comic sans ms", 15))
+            recordlLb = Label(self.window, text="Points: " + str(self.points), bg='medium sea green', fg='#0a4500', font=("comic sans ms", 15))
             recordlLb.pack()
             menuBtn = Button(self.window, text="Back", width=7, height=1, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 20), command=self.records)
             menuBtn.pack()
         
-        if self.diff == 4 and self.points == 6:
+        if self.diff == 4 and self.points == 6 * self.level:
             self.levels()
-        elif self.diff == 5 and self.points == 10:
+        elif self.diff == 5 and self.points == 10 * self.level:
             self.levels()
-        elif self.diff == 6 and self.points == 15:
+        elif self.diff == 6 and self.points == 15 * self.level:
             self.levels()
 
     def levels(self):
         global level
         self.level += 1
-        
         self.nextBtn.config(state=NORMAL)
 
     def records(self):
         nick = self.nickname.get('1.0', END)
-        record = self.level
+        record = self.points
         self.window.destroy()
         self.root.destroy()
         cursed = BD.cursor()
@@ -173,7 +177,7 @@ class Game():
         cursed.execute('SELECT name, rec FROM records ORDER BY rec DESC LIMIT 7')
         rows = cursed.fetchall()
         for row in rows:
-            a=str(row[0]).replace('\n','') +' - '+str(row[1]).replace('\n','') + ' level'
+            a=str(row[0]).replace('\n','') +' - '+str(row[1]).replace('\n','') + ' points'
             name = Label(self.leadWind, text=str(a), bg='medium sea green', fg='#0a4500', font=("comic sans ms", 15)).pack()
             #цикл готовЪ
 
