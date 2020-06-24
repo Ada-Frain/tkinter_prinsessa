@@ -29,7 +29,7 @@ class Game():
         self.diffRbtn3 = Radiobutton(self.frame1, text='Hard', bg='medium sea green', fg='#0a4500', font=("comic sans ms", 13), variable=self.var, value=6, command=self.diffSelect)
         self.diffRbtn3.grid(column=2, row=1)
 
-        self.lidersBtn = Button(self.frame1, text="Leaders", width=8, height=1, bg='green yellow', fg='#0a4500', font=("comic sans ms", 25))
+        self.lidersBtn = Button(self.frame1, text="Leaders", width=8, height=1, bg='green yellow', fg='#0a4500', font=("comic sans ms", 25), )
         self.lidersBtn.grid(column=0, row=2, columnspan=3)
 
         self.root.mainloop()
@@ -136,12 +136,12 @@ class Game():
             recordlLb.pack()
             menuBtn = Button(self.window, text="Back", width=7, height=1, bg='medium sea green', fg='#0a4500', font=("comic sans ms", 20), command=self.records)
             menuBtn.pack()
-            
-            
-            
-            #доделать! проигрыш в игре + кнопка для перехода на гл меню
         
-        if self.points == 6:
+        if self.diff == 4 and self.points == 6:
+            self.levels()
+        elif self.diff == 5 and self.points == 10:
+            self.levels()
+        elif self.diff == 6 and self.points == 15:
             self.levels()
 
     def levels(self):
@@ -152,13 +152,20 @@ class Game():
 
     def records(self):
         nick = self.nickname.get('1.0', END)
-        print(nick)
         record = self.level
-        print(record)
         self.window.destroy()
         self.root.destroy()
+        con = sqlite3.connect('leadeers.db')
+        cursed = con.cursor()
+        cursed.execute('SELECT * FROM records ORDER BY rec DESC')
+        rows = cursed.fetchall()
+        nID = len(rows)+1
+        entities = (nID, nick, record)
+        sql_insert_leader (con, entities)
         Game()
         
+    def liderTab():
+
 
 if __name__ == '__main__':
     Game()
